@@ -1,6 +1,5 @@
 'use strict';
 
-//const Bcrypt = require('bcrypt'); // see: https://github.com/nelsonic/bcrypt
 const crypto = require('crypto');
 const Model = require('objection').Model;
 const Animal = require('./Animal');
