@@ -15,11 +15,22 @@ exports.register = (plugin, options, next) => {
       path: '/register',
       handler: Person.register,
       config: {
-        tags: ['api'],
+        tags: ['api', 'Person'],
         validate: {
           payload: {
             email: Joi.string().email(),
             password: Joi.string().trim().min(6).max(255)
+          }
+        },
+        plugins: {
+          'hapi-swagger': {
+            responses: {
+              '200': {
+                'description': 'Success'/*,
+                'schema': Joi.object({equals: Joi.number(),}).label('Result')*/
+              },
+              '400': {'description': 'Bad Request'}
+            }
           }
         }
       }
@@ -31,10 +42,15 @@ exports.register = (plugin, options, next) => {
       path: '/persons',
       handler: Person.getPersons,
       config: {
-        tags: ['api']/*,
+        tags: ['api', 'Person'],
         auth: {
           strategy: 'jwt',
-        }*/
+        },
+        validate: {
+          headers: Joi.object({
+            'authorization': Joi.string().required()
+          }).unknown()
+        }
       }
     },
 
@@ -44,15 +60,18 @@ exports.register = (plugin, options, next) => {
       path: '/persons/{id}',
       handler: Person.getPersonById,
       config: {
-        tags: ['api'],
+        tags: ['api', 'Person'],
         validate: {
           params: {
             id: Joi.number().integer()
-          }
-        }/*,
+          },
+          headers: Joi.object({
+            'authorization': Joi.string().required()
+          }).unknown()
+        },
         auth: {
           strategy: 'jwt',
-        }*/
+        }
       }
     },
 
@@ -62,7 +81,7 @@ exports.register = (plugin, options, next) => {
       path: '/persons/{id}',
       handler: Person.updatePersonById,
       config: {
-        tags: ['api'],
+        tags: ['api', 'Person'],
         validate: {
           params: {
             id: Joi.number().integer()
@@ -71,11 +90,14 @@ exports.register = (plugin, options, next) => {
             firstName: Joi.string().trim().min(3).max(100),
             lastName: Joi.string().trim().min(3).max(100),
             age: Joi.number().integer()
-          }
-        }/*,
+          },
+          headers: Joi.object({
+            'authorization': Joi.string().required()
+          }).unknown()
+        },
         auth: {
           strategy: 'jwt',
-        }*/
+        }
       }
     },
 
@@ -85,17 +107,20 @@ exports.register = (plugin, options, next) => {
       path: '/persons',
       handler: Person.addPerson,
       config: {
-        tags: ['api'],
+        tags: ['api', 'Person'],
         validate: {
           payload: {
             firstName: Joi.string().trim().min(3).max(100),
             lastName: Joi.string().trim().min(3).max(100),
             age: Joi.number().integer()
-          }
-        }/*,
-         auth: {
+          },
+          headers: Joi.object({
+            'authorization': Joi.string().required()
+          }).unknown()
+        },
+        auth: {
           strategy: 'jwt',
-        }*/
+        }
       }  
     }
 

@@ -15,7 +15,7 @@ exports.register = (server, options, next) => {
       // Tag routes with "api" for use with swagger.
       register: require('hapi-swagger'),
       options: {
-        documentationPage: false/*,
+        documentationPage: false,
         securityDefinitions: {
           'jwt': {
             'type': 'apiKey',
@@ -23,7 +23,12 @@ exports.register = (server, options, next) => {
             'in': 'header'
           }
         },
-        security: [{ 'jwt': [] }]*/
+        security: [{ 'jwt': [] }],
+        info: {
+          'title': 'Test API Documentation',
+          'description': 'This is a sample example of API documentation.'
+        },
+        grouping: 'tags'
       }
     }
   ],
