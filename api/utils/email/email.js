@@ -1,4 +1,4 @@
-const env = require('env2')('.env');
+//const env = require('env2')('.env');
 //console.log(process.env.TEMPLATE_DIRECTORY);
 
 

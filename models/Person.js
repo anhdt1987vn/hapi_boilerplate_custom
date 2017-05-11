@@ -40,6 +40,11 @@ class Person extends Model {
           minLength: 6,
           maxLength: 255,
         },
+        salt: {
+          type: 'string',
+          minLength: 6,
+          maxLength: 255,
+        },
         firstName: {
           type: 'string',
           minLength: 1,

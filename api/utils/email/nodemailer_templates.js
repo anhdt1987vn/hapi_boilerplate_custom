@@ -3,7 +3,7 @@ const path = require('path');
 const EmailTemplate = require('email-templates').EmailTemplate;
 const nodemailer = require('nodemailer');
 //var wellknown = require('nodemailer-wellknown')
-const async = require('async');
+//const async = require('async');
 const Handlebars = require('handlebars');
 
 var templatesDir = path.resolve(__dirname, 'templates');

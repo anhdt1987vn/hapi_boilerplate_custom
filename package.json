@@ -47,6 +47,7 @@
     "nodemailer-ses-transport": "^1.5.1",
     "objection": "^0.7.0",
     "path": "^0.12.7",
+    "redis-connection": "^5.0.0",
     "sendemail": "^3.3.0",
     "vision": "4.x.x"
   },

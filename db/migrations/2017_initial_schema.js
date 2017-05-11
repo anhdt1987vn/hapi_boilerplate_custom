@@ -5,6 +5,7 @@ exports.up = function (knex) {
       table.integer('parentId').unsigned().references('id').inTable('Person');
       table.string('email');
       table.string('password');
+      table.string('salt');
       table.string('firstName');
       table.string('lastName');
       table.integer('age');

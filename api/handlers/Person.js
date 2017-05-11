@@ -1,8 +1,21 @@
 'use strict';
 
-const Person = require('../../models/Person');
 const Boom = require('boom');
-const SendMail = require('../utils/email/nodemailer_templates');
+
+const Person = require('../../models/Person');
+const utilsPerson = require('../utils/persons/userFunctions');
+//const SendMail = require('../utils/email/nodemailer_templates');
+
+
+/*var redisClient = require('redis-connection')();
+
+redisClient.set("Hello", "World", redisClient.print);
+
+redisClient.get("Hello", function(err, reply) {
+   // reply is null when the key is missing
+  console.log('Hello ' + reply);
+});*/
+
 
 /*
 * Register function
@@ -14,10 +27,10 @@ module.exports.register = function (request, reply) {
   var passwordData = p.sha512(request.payload.password, salt);
 
   Person.query()
-        .insert({email: request.payload.email, password: passwordData.passwordHash})
+        .insert({email: request.payload.email, password: passwordData.passwordHash, salt: passwordData.salt})
         .then(function (person){
 
-          SendMail;
+          //SendMail;
           
           reply(person);
 
@@ -26,6 +39,51 @@ module.exports.register = function (request, reply) {
 
           reply(err);
         });
+};
+
+
+/**
+ *
+ * Login function
+ * 
+ */
+
+module.exports.login = function (request, reply) {
+  utilsPerson.emailIsExist(request.payload.email, function(salt){
+
+    //console.log(result);
+    let p = new Person();
+    //var salt = p.genRandomString(16);   //Gives us salt of length 16
+    var passwordData = p.sha512(request.payload.password, salt);
+    console.log(passwordData);
+    Person.query()
+        .where('password', passwordData.passwordHash)
+        .then(person => {
+
+          // Check whether the email
+          // is already taken and error out if so
+          if(person.length === 0){
+          //if(objIsEmpty(person)){
+            reply('No Person');
+          
+          }else{
+            console.log('ok');
+            reply(person);
+          }
+
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+  });
+
+  /*if(utilsPerson.emailIsExist(request.payload.email)){
+    console.log('email is exist ');
+    console.log(utilsPerson.emailIsExist(request.payload.email));
+  }else{
+    console.log('email is not exist ');
+    console.log(utilsPerson.emailIsExist(request.payload.email));
+  }*/
 };
 
 
