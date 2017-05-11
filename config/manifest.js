@@ -41,6 +41,9 @@ const manifest = {
       plugin: './plugins/auth'
     },
     {
+      plugin: './plugins/google-auth'
+    },
+    {
       plugin: './plugins/knex'
     },
     {
