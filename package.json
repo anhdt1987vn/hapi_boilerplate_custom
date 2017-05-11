@@ -25,6 +25,7 @@
     "boilerplate"
   ],
   "dependencies": {
+    "aguid": "^2.0.0",
     "async": "^2.4.0",
     "boom": "4.x.x",
     "email-templates": "^2.5.6",
@@ -39,6 +40,7 @@
     "hapi-swagger": "7.7.0",
     "inert": "4.x.x",
     "joi": "10.x.x",
+    "jsonwebtoken": "^7.4.0",
     "knex": "^0.12.6",
     "labbable": "2.x.x",
     "mysql": "^2.12.0",

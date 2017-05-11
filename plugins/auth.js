@@ -1,29 +1,16 @@
 const SECRET_KEY = require('../config/secret');
+const jwt = require('../api/utils/jwt');
+//var redisClient = require('redis-connection')(); // instantiate redis-connection
 
 exports.register = function (plugin, options, next) {
 
   plugin.auth.strategy('jwt', 'jwt', {
     key: SECRET_KEY,
     verifyOptions: {
-      algorithms: ['HS256']
+      algorithms: ['HS256'],
+      ignoreExpiration: true
     },
-    // Implement validation function
-    validateFunc: (decoded, request, callback) => {
-      // NOTE: This is purely for demonstration purposes!
-      var users = [
-        {
-          id: 1,
-          name: 'Jon Snow'
-        }
-      ];
-
-      if (users.find(u => u.id === decoded.id)) {
-        return callback(null, true);
-      }
-      else {
-        return callback(null, false);
-      }
-    }
+    validateFunc: jwt.validateFunc
   });
 
   // Uncomment this to apply default auth to all routes
@@ -31,6 +18,7 @@ exports.register = function (plugin, options, next) {
 
   next();
 };
+
 
 exports.register.attributes = {
   name: 'auth'

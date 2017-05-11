@@ -70,6 +70,34 @@ exports.register = (plugin, options, next) => {
       }
     },
 
+    {
+      method: ['GET','POST'],
+      path: '/logout',
+      handler: Person.logout,
+      config: { 
+        tags: ['api', 'Person'],
+        auth: {
+          strategy: 'jwt',
+        },
+        validate: {
+          headers: Joi.object({
+            'authorization': Joi.string().required()
+          }).unknown()
+        },
+        plugins: {
+          'hapi-swagger': {
+            responses: {
+              '200': {
+                'description': 'Success'/*,
+                'schema': Joi.object({equals: Joi.number(),}).label('Result')*/
+              },
+              '400': {'description': 'Bad Request'}
+            }
+          }
+        }
+      }    
+    },
+
     // Get Persons
     {
       method: 'GET',

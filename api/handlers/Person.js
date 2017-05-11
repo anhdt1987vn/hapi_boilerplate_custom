@@ -1,21 +1,16 @@
 'use strict';
 
 const Boom = require('boom');
+const JWT  = require('jsonwebtoken');
+//const redisClient = require('redis-connection')(); // instantiate redis-connection
 
 const Person = require('../../models/Person');
 const utilsPerson = require('../utils/persons/userFunctions');
+const jwt = require('../utils/jwt');
+const SECRET_KEY = require('../../config/secret');
+
+
 //const SendMail = require('../utils/email/nodemailer_templates');
-
-
-/*var redisClient = require('redis-connection')();
-
-redisClient.set("Hello", "World", redisClient.print);
-
-redisClient.get("Hello", function(err, reply) {
-   // reply is null when the key is missing
-  console.log('Hello ' + reply);
-});*/
-
 
 /*
 * Register function
@@ -47,11 +42,9 @@ module.exports.register = function (request, reply) {
  * Login function
  * 
  */
-
 module.exports.login = function (request, reply) {
   utilsPerson.emailIsExist(request.payload.email, function(salt){
 
-    //console.log(result);
     let p = new Person();
     //var salt = p.genRandomString(16);   //Gives us salt of length 16
     var passwordData = p.sha512(request.payload.password, salt);
@@ -68,6 +61,7 @@ module.exports.login = function (request, reply) {
           
           }else{
             console.log('ok');
+            jwt.creatToken('did_123456', request.payload.email);
             reply(person);
           }
 
@@ -76,14 +70,19 @@ module.exports.login = function (request, reply) {
           console.log(err);
         });
   });
+};
 
-  /*if(utilsPerson.emailIsExist(request.payload.email)){
-    console.log('email is exist ');
-    console.log(utilsPerson.emailIsExist(request.payload.email));
-  }else{
-    console.log('email is not exist ');
-    console.log(utilsPerson.emailIsExist(request.payload.email));
-  }*/
+
+/**
+ *
+ * Logout
+ *
+ */
+module.exports.logout = function(request, reply) {
+
+  jwt.updateToken(request, reply);
+  reply({text: 'You have been logged out!'});
+
 };
 
 
