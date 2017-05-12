@@ -9,7 +9,7 @@ var opts = {
   config: {  // optional route config (as for any route in hapi)
     description: 'Google auth callback',
     notes: 'Handled by hapi-auth-google plugin',
-    tags: ['api', 'auth', 'plugin']
+    tags: ['plugin']
   },
   access_type: 'online', // options: offline, online
   approval_prompt: 'auto', // options: always, auto
@@ -20,9 +20,9 @@ var opts = {
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET
 };
 
-console.log(process.env.BASE_URL);
-console.log(process.env.GOOGLE_CLIENT_ID);
-console.log(process.env.GOOGLE_CLIENT_SECRET);
+//console.log(process.env.BASE_URL);
+//console.log(process.env.GOOGLE_CLIENT_ID);
+//console.log(process.env.GOOGLE_CLIENT_SECRET);
 
 exports.register = (server, options, next) => {
 

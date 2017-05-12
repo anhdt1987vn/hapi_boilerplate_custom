@@ -70,6 +70,64 @@ exports.register = (plugin, options, next) => {
       }
     },
 
+    // Login with Google
+    {
+      method: 'GET',
+      path: '/google-login/{id_token}',
+      handler: Person.googleLogin,
+      config: {
+        tags: ['api', 'Person'],
+        //auth: false,
+        validate: {
+          params: {
+            id_token: Joi.string().required()
+          }
+        },
+        plugins: {
+          'hapi-swagger': {
+            responses: {
+              '200': {
+                'description': 'Success'/*,
+                'schema': Joi.object({equals: Joi.number(),}).label('Result')*/
+              },
+              '400': {'description': 'Bad Request'}
+            }
+          }
+        }
+      }
+    },
+
+
+    // Login with Facebook
+    {
+      method: 'GET',
+      path: '/facebookLogin/{access_token}',
+      handler: Person.facebookLogin,
+      config: {
+        tags: ['api', 'Person'],
+        //auth: false,
+        validate: {
+          params: {
+            access_token: Joi.string().required()
+            //user_id: Joi.string()
+          }
+        },
+        plugins: {
+          'hapi-swagger': {
+            responses: {
+              '200': {
+                'description': 'Success'/*,
+                'schema': Joi.object({equals: Joi.number(),}).label('Result')*/
+              },
+              '400': {'description': 'Bad Request'}
+            }
+          }
+        }
+      }
+    },
+
+
+    // Logout
     {
       method: ['GET','POST'],
       path: '/logout',

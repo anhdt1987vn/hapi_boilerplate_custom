@@ -2,6 +2,9 @@
 
 const Boom = require('boom');
 const JWT  = require('jsonwebtoken');
+const Wreck = require('wreck');
+const FB = require('fb');
+const fs = require('fs');
 //const redisClient = require('redis-connection')(); // instantiate redis-connection
 
 const Person = require('../../models/Person');
@@ -70,6 +73,42 @@ module.exports.login = function (request, reply) {
           console.log(err);
         });
   });
+};
+
+/**
+ *
+ * Login with Google+
+ *
+ */
+module.exports.googleLogin = function(request, reply){
+
+  const urlEndpoint = "https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=";
+
+  Wreck.get(urlEndpoint + request.params.id_token, (err, res, payload) => {
+    //console.log(err);
+    //const stream = Wreck.toReadableStream(payload, 'ascii');
+    //const read = stream.read();
+
+    var rs = JSON.parse(payload.toString());
+    console.log(rs.email);
+
+  });
+
+
+};
+
+
+/**
+ *
+ * Login with Facebook
+ *
+ */
+module.exports.facebookLogin = function(request, reply){
+
+  FB.api('me', { fields: 'id,name,email,picture', access_token: request.params.access_token }, function (res) {
+    console.log(res);
+  });
+  
 };
 
 

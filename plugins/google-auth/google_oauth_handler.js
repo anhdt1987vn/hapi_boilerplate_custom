@@ -31,7 +31,7 @@ module.exports = function custom_handler(req, reply, tokens, profile) {
     redisClient.set(session.id, JSON.stringify(profile), function (err, res) {
 
       // reply to client with a view
-      return reply("Hello " +profile.name.givenName + " You Logged in Using Goolge!")
+      return reply("Hello " +profile.name.givenName + " You Logged in Using Goolge!" + JSON.stringify(profile))
       .state('token', token); // see: http://hapijs.com/tutorials/cookies
     });
   }else {
