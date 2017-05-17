@@ -12,6 +12,7 @@ const utilsPerson = require('../utils/persons/userFunctions');
 const jwt = require('../utils/jwt');
 const SECRET_KEY = require('../../config/secret');
 
+const apn = require('../utils/notifications/')
 
 //const SendMail = require('../utils/email/nodemailer_templates');
 
@@ -27,7 +28,7 @@ module.exports.register = function (request, reply) {
   Person.query()
         .insert({email: request.payload.email, password: passwordData.passwordHash, salt: passwordData.salt})
         .then(function (person){
-
+          apn;
           //SendMail;
           
           reply(person);
@@ -64,8 +65,9 @@ module.exports.login = function (request, reply) {
           
           }else{
             console.log('ok');
-            jwt.creatToken('did_123456', request.payload.email);
-            reply(person);
+            var token = jwt.creatToken('did_123456', request.payload.email);
+            console.log(token);
+            reply(token);
           }
 
         })

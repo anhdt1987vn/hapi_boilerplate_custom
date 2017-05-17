@@ -4,6 +4,8 @@ const Home = require('./handlers/home');
 const Person = require('./handlers/Person');
 const verifyUniqueUser = require('./utils/persons/userFunctions').verifyUniqueUser;
 
+
+
 exports.register = (plugin, options, next) => {
 
   plugin.route([

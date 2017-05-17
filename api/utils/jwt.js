@@ -33,7 +33,8 @@ module.exports.creatToken = function(deviceId, email){
   //redisClient.expire(session.id, 30);
   // sign the session as a JWT
   var token = JWT.sign(session, SECRET_KEY); // synchronous
-  console.log(token);  
+  //console.log(token); 
+  return token;
 };
 
 
