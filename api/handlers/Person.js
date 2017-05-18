@@ -65,7 +65,7 @@ module.exports.login = function (request, reply) {
           
           }else{
             console.log('ok');
-            var token = jwt.creatToken('did_123456', request.payload.email);
+            var token = jwt.creatToken('did_123456', request.payload.email, 'primary');
             console.log(token);
             reply(token);
           }

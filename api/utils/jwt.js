@@ -19,12 +19,13 @@ redisClient.get('redis', function (rediserror, reply) {
   console.log('Redis is ' +reply.toString()); // confirm we can access redis
 });
 
-module.exports.creatToken = function(deviceId, email){
+module.exports.creatToken = function(deviceId, email, type){
   var session = {
     deviceId: deviceId,
     email: email,
     valid: true, // this will be set to false when the person logs out
-    id: aguid(), // a random session id
+    id: type + "_" +aguid(), // a random session id
+    type: type,
     exp: new Date().getTime() + 30 * 60 * 1000 // expires in 30 minutes time
   };
 
