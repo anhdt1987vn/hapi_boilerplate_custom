@@ -47,6 +47,9 @@ const manifest = {
       plugin: './plugins/knex'
     },
     {
+      plugin: './plugins/monitor'
+    },
+    {
       plugin: './api',
       options: { routes: { prefix: '/api' } }
     },

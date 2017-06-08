@@ -16,7 +16,9 @@ const utilsGuest = require('../utils/guests/guestFunctions');
 const jwt = require('../utils/jwt');
 const SECRET_KEY = require('../../config/secret');
 
-const apn = require('../utils/notifications/');
+
+//const apn = require('../utils/notifications/');
+
 
 //const SendMail = require('../utils/email/nodemailer_templates');
 
