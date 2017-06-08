@@ -4,12 +4,14 @@ const Home = require('./handlers/home');
 const Person = require('./handlers/Person');
 const verifyUniqueUser = require('./utils/persons/userFunctions').verifyUniqueUser;
 
+
+
 exports.register = (plugin, options, next) => {
 
   plugin.route([
-    // { method: 'GET', path: '/', config: Home.hello },
-    // { method: 'GET', path: '/restricted', config: Home.restricted },
-    // { method: 'GET', path: '/{path*}', config: Home.notFound },
+    { method: 'GET', path: '/', config: Home.hello },
+    { method: 'GET', path: '/restricted', config: Home.restricted },
+    { method: 'GET', path: '/{path*}', config: Home.notFound },
 
     // Register
     { 
@@ -70,6 +72,66 @@ exports.register = (plugin, options, next) => {
       }
     },
 
+    // Login with Google
+    {
+      method: 'POST',
+      path: '/google-login',
+      handler: Person.googleLogin,
+      config: {
+        tags: ['api', 'Person'],
+        //auth: false,
+        validate: {
+          payload: {
+            access_token: Joi.string().required(),
+            user_id: Joi.string().required()
+          }
+        },
+        plugins: {
+          'hapi-swagger': {
+            responses: {
+              '200': {
+                'description': 'Success'/*,
+                'schema': Joi.object({equals: Joi.number(),}).label('Result')*/
+              },
+              '400': {'description': 'Bad Request'}
+            }
+          }
+        }
+      }
+    },
+
+
+    // Login with Facebook
+    {
+      method: 'POST',
+      path: '/facebookLogin',
+      handler: Person.facebookLogin,
+      config: {
+        tags: ['api', 'Person'],
+        //auth: false,
+        validate: {
+          payload: {
+            access_token: Joi.string().required(),
+            user_id: Joi.string().required()
+          }
+
+        },
+        plugins: {
+          'hapi-swagger': {
+            responses: {
+              '200': {
+                'description': 'Success'/*,
+                'schema': Joi.object({equals: Joi.number(),}).label('Result')*/
+              },
+              '400': {'description': 'Bad Request'}
+            }
+          }
+        }
+      }
+    },
+
+
+    // Logout
     {
       method: ['GET','POST'],
       path: '/logout',
@@ -184,6 +246,27 @@ exports.register = (plugin, options, next) => {
           strategy: 'jwt',
         }
       }  
+    },
+
+    // Get Movies By person ID
+    {
+      method: 'GET',
+      path: '/persons/{id}/movies',
+      handler: Person.getMoviesByPerson,
+      config: {
+        tags: ['api', 'Person-Movies'],
+        validate: {
+          params: {
+            id: Joi.number().integer()
+          }/*,
+          headers: Joi.object({
+            'authorization': Joi.string().required()
+          }).unknown()*/
+        }/*,
+        auth: {
+          strategy: 'jwt',
+        }*/
+      }
     }
 
   ]);
