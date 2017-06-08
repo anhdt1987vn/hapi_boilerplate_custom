@@ -6,6 +6,8 @@ exports.up = function (knex) {
       table.string('email');
       table.string('password');
       table.string('salt');
+      table.string('facebookId');
+      table.string('googleId');
       table.string('firstName');
       table.string('lastName');
       table.integer('age');

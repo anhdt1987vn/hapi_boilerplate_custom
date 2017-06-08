@@ -33,7 +33,7 @@ class Movie extends Model {
     return {
       actors: {
         relation: Model.ManyToManyRelation,
-        modelClass: __dirname + '/lib/models/Person',
+        modelClass: __dirname + '/Person',
         join: {
           from: 'Movie.id',
           through: {

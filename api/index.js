@@ -74,15 +74,16 @@ exports.register = (plugin, options, next) => {
 
     // Login with Google
     {
-      method: 'GET',
-      path: '/google-login/{id_token}',
+      method: 'POST',
+      path: '/google-login',
       handler: Person.googleLogin,
       config: {
         tags: ['api', 'Person'],
         //auth: false,
         validate: {
-          params: {
-            id_token: Joi.string().required()
+          payload: {
+            access_token: Joi.string().required(),
+            user_id: Joi.string().required()
           }
         },
         plugins: {
@@ -102,17 +103,18 @@ exports.register = (plugin, options, next) => {
 
     // Login with Facebook
     {
-      method: 'GET',
-      path: '/facebookLogin/{access_token}',
+      method: 'POST',
+      path: '/facebookLogin',
       handler: Person.facebookLogin,
       config: {
         tags: ['api', 'Person'],
         //auth: false,
         validate: {
-          params: {
-            access_token: Joi.string().required()
-            //user_id: Joi.string()
+          payload: {
+            access_token: Joi.string().required(),
+            user_id: Joi.string().required()
           }
+
         },
         plugins: {
           'hapi-swagger': {
@@ -244,6 +246,27 @@ exports.register = (plugin, options, next) => {
           strategy: 'jwt',
         }
       }  
+    },
+
+    // Get Movies By person ID
+    {
+      method: 'GET',
+      path: '/persons/{id}/movies',
+      handler: Person.getMoviesByPerson,
+      config: {
+        tags: ['api', 'Person-Movies'],
+        validate: {
+          params: {
+            id: Joi.number().integer()
+          }/*,
+          headers: Joi.object({
+            'authorization': Joi.string().required()
+          }).unknown()*/
+        }/*,
+        auth: {
+          strategy: 'jwt',
+        }*/
+      }
     }
 
   ]);

@@ -29,7 +29,12 @@ module.exports.creatToken = function(deviceId, email){
   };
 
   // create the session in Redis
-  redisClient.set(session.id, JSON.stringify(session));
+  //redisClient.set(session.id, JSON.stringify(session));
+
+  /**START_Debug with hash*/
+  redisClient.hset('RESIDENTS', session.id, JSON.stringify(session));
+  /**END_Debug with hash*/
+
   //redisClient.expire(session.id, 30);
   // sign the session as a JWT
   var token = JWT.sign(session, SECRET_KEY); // synchronous
@@ -42,9 +47,32 @@ module.exports.creatToken = function(deviceId, email){
 module.exports.validateFunc = function (decoded, request, callback) {
   console.log(" - - - - - - - DECODED token:");
   console.log(decoded);
+
   // do your checks to see if the session is valid
-  redisClient.get(decoded.id, function (rediserror, reply) {
-    /* istanbul ignore if */
+  // redisClient.get(decoded.id, function (rediserror, reply) {
+  //   /* istanbul ignore if */
+  //   if(rediserror) {
+  //     console.log(rediserror);
+  //   }
+  //   console.log(' - - - - - - - REDIS reply - - - - - - - ', reply);
+  //   var session;
+  //   if(reply) {
+  //     session = JSON.parse(reply);
+  //   }
+  //   else { // unable to find session in redis ... reply is null
+  //     return callback(rediserror, false);
+  //   }
+
+  //   if (session.valid === true && session.exp >= new Date().getTime()) {
+  //     return callback(rediserror, true);
+  //   }
+  //   else {
+  //     return callback(rediserror, false);
+  //   }
+  // });
+  
+  redisClient.hget('RESIDENTS', decoded.id, function(rediserror, reply){
+      /* istanbul ignore if */
     if(rediserror) {
       console.log(rediserror);
     }
@@ -64,13 +92,14 @@ module.exports.validateFunc = function (decoded, request, callback) {
       return callback(rediserror, false);
     }
   });
+
 };
 
 module.exports.updateToken = function(request, reply){
   // implement your own login/auth function here
   var decoded = JWT.decode(request.headers.authorization, SECRET_KEY);
   var session;
-  redisClient.get(decoded.id, function(rediserror, redisreply) {
+  /*redisClient.get(decoded.id, function(rediserror, redisreply) {
 
     if(rediserror) {
       console.log(rediserror);
@@ -83,6 +112,19 @@ module.exports.updateToken = function(request, reply){
     session.ended = new Date().getTime();
     // create the session in Redis
     redisClient.set(session.id, JSON.stringify(session));
+  });*/
+  redisClient.hget('RESIDENTS', decoded.id, function(rediserror, redisreply){
+    if(rediserror) {
+      console.log(rediserror);
+    }
+    session = JSON.parse(redisreply);
+    console.log(' - - - - - - SESSION - - - - - - - -');
+    console.log(session);
+    // update the session to no longer valid:
+    session.valid = false;
+    session.ended = new Date().getTime();
+    // create the session in Redis
+    redisClient.hset('RESIDENTS', session.id, JSON.stringify(session));
   });
 };
 

@@ -45,6 +45,16 @@ class Person extends Model {
           minLength: 6,
           maxLength: 255,
         },
+        facebookId: {
+          type: 'string',
+          minLength: 6,
+          maxLength: 255
+        },
+        googleId: {
+          type: 'string',
+          minLength: 6,
+          maxLength: 255
+        },
         firstName: {
           type: 'string',
           minLength: 1,
